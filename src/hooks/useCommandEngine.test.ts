@@ -1,5 +1,4 @@
 import { renderHook, act } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useCommandEngine } from './useCommandEngine';
 import { DEFAULT_ACTIONS } from '../lib/commands';
 
@@ -65,4 +64,49 @@ describe('useCommandEngine', () => {
     expect((DEFAULT_ACTIONS[1] as MockAction).execute).toHaveBeenCalled();
     expect(result.current.state.isOpen).toBe(false);
   });
+
+  describe('Navigation & Exécution (J2)', () => {
+  it('navigates down and loops correctly', () => {
+    const { result } = renderHook(() => useCommandEngine());
+    act(() => window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true })));
+    
+    expect(result.current.state.selectedIndex).toBe(0);
+    act(() => result.current.navigate('down'));
+    expect(result.current.state.selectedIndex).toBe(1);
+    act(() => result.current.navigate('down'));
+    expect(result.current.state.selectedIndex).toBe(2);
+
+    // Loop back to start
+    act(() => result.current.navigate('down'));
+    expect(result.current.state.selectedIndex).toBe(0);
+  });
+
+  it('navigates up and loops correctly', () => {
+    const { result } = renderHook(() => useCommandEngine());
+    act(() => window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true })));
+    
+    // Go to the end
+    act(() => result.current.navigate('down'));
+    act(() => result.current.navigate('down'));
+    expect(result.current.state.selectedIndex).toBe(2);
+    
+    act(() => result.current.navigate('up'));
+    expect(result.current.state.selectedIndex).toBe(1);
+
+    // Loop towards the end
+    act(() => result.current.navigate('up'));
+    expect(result.current.state.selectedIndex).toBe(0);
+  });
+
+  it('executes the currently selected action via Enter', () => {
+    const { result } = renderHook(() => useCommandEngine());
+    act(() => window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true })));
+    
+    act(() => result.current.navigate('down'));
+    act(() => result.current.execute());
+    
+    expect((DEFAULT_ACTIONS[1] as MockAction).execute).toHaveBeenCalled();
+    expect(result.current.state.isOpen).toBe(false);
+  });
+});
 });

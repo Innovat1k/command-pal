@@ -5,6 +5,12 @@
 
 ---
 
+## ⚡ Live Demo
+
+https://command-pal-two.vercel.app/
+
+---
+
 ## 🧭 Table of Contents
 
 - [📝 Description](#-description)
@@ -111,6 +117,7 @@ npm run build
 npm run preview
 
 ```
+
 ---
 
 ## 🗂️ Project Structure

@@ -11,11 +11,11 @@
 - **✅ Deliverable**: Overlay toggles via `Ctrl/Cmd+K`, input filters list instantly
 
 ### Day 2 — Focus Trap & Keyboard Navigation
-- [ ] Implement `useFocusTrap` (custom, zero dependencies)
-- [ ] Enable `↑` / `↓` navigation with index cycling
-- [ ] `Enter` triggers action execution + closes overlay
-- [ ] `Tab` / `Shift+Tab` locked inside overlay
-- [ ] Focus restoration on close (returns to trigger element)
+- [X] Implement `useFocusTrap` (custom, zero dependencies)
+- [X] Enable `↑` / `↓` navigation with index cycling
+- [X] `Enter` triggers action execution + closes overlay
+- [X] `Tab` / `Shift+Tab` locked inside overlay
+- [X] Focus restoration on close (returns to trigger element)
 - **✅ Deliverable**: 100% keyboard-operable navigation & focus management
 
 ### Day 3 — Animations & UX Polish
