@@ -1,22 +1,29 @@
-import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import type { CommandState, CommandAction } from '../types/command';
-import { DEFAULT_ACTIONS } from '../lib/commands';
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import type { CommandState, CommandAction } from "../types/command";
+import { DEFAULT_ACTIONS } from "../lib/commands";
 
-// Manages command palette state, filtering, and keyboard navigation with global Ctrl+K toggle
+// Manages command palette state, filtering, keyboard navigation, and focus lifecycle
 export function useCommandEngine() {
   const previousFocusRef = useRef<HTMLElement | null>(null);
 
   const [state, setState] = useState<CommandState>({
     isOpen: false,
-    query: '',
+    query: "",
     selectedIndex: 0,
   });
+
+  // IMMEDIATE focus restoration (decoupled from animation)
+  const restoreFocusImmediately = useCallback(() => {
+    queueMicrotask(() => {
+      previousFocusRef.current?.focus();
+    });
+  }, []);
 
   // Global shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // Open palette
-      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+      if ((e.ctrlKey || e.metaKey) && e.key === "k") {
         e.preventDefault();
 
         // Save current focused element BEFORE opening
@@ -24,26 +31,24 @@ export function useCommandEngine() {
 
         setState({
           isOpen: true,
-          query: '',
+          query: "",
           selectedIndex: 0,
         });
       }
 
-      // Close palette
-      if (e.key === 'Escape') {
-        setState(prev => ({
-          ...prev,
-          isOpen: false,
-        }));
+      // Close palette + restore focus IMMEDIATELY
+      if (e.key === "Escape") {
+        setState((prev) => ({ ...prev, isOpen: false }));
+        restoreFocusImmediately();
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener("keydown", handleKeyDown);
     };
-  }, []);
+  }, [restoreFocusImmediately]);
 
   // Filter actions
   const filteredActions: CommandAction[] = useMemo(() => {
@@ -51,38 +56,36 @@ export function useCommandEngine() {
 
     const lower = state.query.toLowerCase();
 
-    return DEFAULT_ACTIONS.filter(action =>
-      action.label.toLowerCase().includes(lower)
+    return DEFAULT_ACTIONS.filter((action) =>
+      action.label.toLowerCase().includes(lower),
     );
   }, [state.query]);
 
   // Query setter
   const setQuery = useCallback((query: string) => {
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       query,
       selectedIndex: 0,
     }));
   }, []);
 
-  // Close palette
+  // Close palette + restore focus IMMEDIATELY
   const close = useCallback(() => {
-    setState(prev => ({
-      ...prev,
-      isOpen: false,
-    }));
-  }, []);
+    setState((prev) => ({ ...prev, isOpen: false }));
+    restoreFocusImmediately();
+  }, [restoreFocusImmediately]);
 
   // Keyboard navigation
   const navigate = useCallback(
-    (direction: 'up' | 'down') => {
-      setState(prev => {
+    (direction: "up" | "down") => {
+      setState((prev) => {
         const length = filteredActions.length;
 
         if (length === 0) return prev;
 
         const nextIndex =
-          direction === 'down'
+          direction === "down"
             ? (prev.selectedIndex + 1) % length
             : (prev.selectedIndex - 1 + length) % length;
 
@@ -92,10 +95,10 @@ export function useCommandEngine() {
         };
       });
     },
-    [filteredActions]
+    [filteredActions],
   );
 
-  // Execute selected action
+  // Execute selected action + restore focus IMMEDIATELY
   const execute = useCallback(() => {
     const action = filteredActions[state.selectedIndex];
 
@@ -103,36 +106,30 @@ export function useCommandEngine() {
 
     action.execute();
 
-    setState(prev => ({
-      ...prev,
-      isOpen: false,
-    }));
-  }, [filteredActions, state.selectedIndex]);
+    setState((prev) => ({ ...prev, isOpen: false }));
+    restoreFocusImmediately();
+  }, [filteredActions, state.selectedIndex, restoreFocusImmediately]);
 
   // Overlay keyboard manager
   const handleOverlayKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
-      if (e.key === 'ArrowDown') {
+      if (e.key === "ArrowDown") {
         e.preventDefault();
-        navigate('down');
-      }
-
-      else if (e.key === 'ArrowUp') {
+        navigate("down");
+      } else if (e.key === "ArrowUp") {
         e.preventDefault();
-        navigate('up');
-      }
-
-      else if (e.key === 'Enter') {
+        navigate("up");
+      } else if (e.key === "Enter") {
         e.preventDefault();
         execute();
       }
     },
-    [navigate, execute]
+    [navigate, execute],
   );
 
   const restoreFocus = useCallback(() => {
-  previousFocusRef.current?.focus();
-}, []);
+    previousFocusRef.current?.focus();
+  }, []);
 
   return {
     state,
@@ -143,5 +140,6 @@ export function useCommandEngine() {
     execute,
     handleOverlayKeyDown,
     restoreFocus,
+    restoreFocusImmediately,
   };
 }

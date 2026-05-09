@@ -6,6 +6,8 @@ export type CommandAction = {
   shortcut?: string;
   category: ActionCategory;
   execute: () => void;
+  showFeedback?: boolean; 
+  successMessage?: string
 };
 
 export type CommandState = {

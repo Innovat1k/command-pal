@@ -1,1 +1,23 @@
 @import "tailwindcss";
+
+/* Toast : Enter */
+@keyframes toast-enter {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Toast : Exit */
+@keyframes toast-exit {
+  to { opacity: 0; transform: translateY(16px); }
+}
+
+/* Utilities */
+.animate-toast-enter { animation: toast-enter 200ms ease-out; }
+.animate-toast-exit { animation: toast-exit 200ms ease-in forwards; }
+
+/* Respects system preferences */
+@media (prefers-reduced-motion: reduce) {
+  .animate-toast-enter, .animate-toast-exit {
+    animation: none !important;
+  }
+}

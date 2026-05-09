@@ -19,11 +19,11 @@
 - **✅ Deliverable**: 100% keyboard-operable navigation & focus management
 
 ### Day 3 — Animations & UX Polish
-- [ ] CSS transitions (fade + scale) for overlay open/close
-- [ ] Active item highlight + hover states
-- [ ] Keyboard shortcut hints display
-- [ ] Empty state handling ("No results found")
-- [ ] Action execution feedback (toast/console)
+- [X] CSS transitions (fade + scale) for overlay open/close
+- [x] Active item highlight + hover states
+- [X] Keyboard shortcut hints display
+- [X] Empty state handling ("No results found")
+- [X] Action execution feedback (toast/console)
 - **✅ Deliverable**: Fluid, responsive UI with clear visual feedback
 
 ### Day 4 — Accessibility (A11y)

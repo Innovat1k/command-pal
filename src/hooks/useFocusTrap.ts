@@ -1,10 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
 // Traps focus inside container (e.g., modal) when open, with initial focus and looped Tab navigation
 export function useFocusTrap(
   isOpen: boolean,
   containerRef: React.RefObject<HTMLElement | null>,
-  restoreFocus: () => void
 ) {
   useEffect(() => {
     if (!isOpen || !containerRef.current) return;
@@ -16,7 +15,7 @@ export function useFocusTrap(
       'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
     const focusableElements = Array.from(
-      container.querySelectorAll<HTMLElement>(selector)
+      container.querySelectorAll<HTMLElement>(selector),
     );
 
     // Initial focus
@@ -26,7 +25,7 @@ export function useFocusTrap(
 
     // Focus trap
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key !== 'Tab') return;
+      if (e.key !== "Tab") return;
 
       if (focusableElements.length === 0) return;
 
@@ -51,13 +50,10 @@ export function useFocusTrap(
       }
     };
 
-    container.addEventListener('keydown', handleKeyDown);
+    container.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      container.removeEventListener('keydown', handleKeyDown);
-
-      // Restore previous focus
-      restoreFocus()
+      container.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isOpen, containerRef, restoreFocus]);
+  }, [isOpen, containerRef]);
 }
