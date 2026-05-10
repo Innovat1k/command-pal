@@ -27,11 +27,11 @@
 - **✅ Deliverable**: Fluid, responsive UI with clear visual feedback
 
 ### Day 4 — Accessibility (A11y)
-- [ ] ARIA roles: `dialog`, `listbox`, `option`, `search`
-- [ ] `aria-modal="true"`, `aria-activedescendant`, `aria-selected`
-- [ ] Verify color contrast ≥ 4.5:1
-- [ ] Respect `prefers-reduced-motion`
-- [ ] Test with NVDA / VoiceOver
+- [X] ARIA roles: `dialog`, `listbox`, `option`, `search`
+- [X] `aria-modal="true"`, `aria-activedescendant`, `aria-selected`
+- [X] Verify color contrast ≥ 4.5:1
+- [X] Respect `prefers-reduced-motion`
+- [X] Test with NVDA / VoiceOver
 - **✅ Deliverable**: Lighthouse Accessibility score = 100
 
 ### Day 5 — Functional Actions

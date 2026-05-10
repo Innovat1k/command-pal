@@ -1,49 +1,59 @@
 import { useEffect } from "react";
 
-// Traps focus inside container (e.g., modal) when open, with initial focus and looped Tab navigation
+// Selector for focusable elements (keyboard-accessible)
+const FOCUSABLE_SELECTOR =
+  "button, [href], input, select, textarea, [tabindex]:not([tabindex='-1'])";
+
+// Traps focus inside container (e.g., modal) when open, with initial focus and looped Tab navigation  
 export function useFocusTrap(
   isOpen: boolean,
   containerRef: React.RefObject<HTMLElement | null>,
+  initialFocusRef?: React.RefObject<HTMLElement | null>,
 ) {
   useEffect(() => {
-    if (!isOpen || !containerRef.current) return;
+    // Early exit if not open or container not ready
+    if (!isOpen || !containerRef.current) {
+      return;
+    }
 
     const container = containerRef.current;
 
-    // Focusable selector
-    const selector =
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
-
-    const focusableElements = Array.from(
-      container.querySelectorAll<HTMLElement>(selector),
-    );
-
-    // Initial focus
-    if (focusableElements.length > 0) {
-      focusableElements[0].focus();
+    // Set initial focus: explicit ref or first focusable element
+    if (initialFocusRef?.current) {
+      initialFocusRef.current.focus();
+    } else {
+      const firstFocusable =
+        container.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
+      firstFocusable?.focus();
     }
 
-    // Focus trap
+    // Helper: get all focusable elements inside container
+    const getFocusableElements = () =>
+      Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR));
+
+    // Handle Tab key to trap focus within container
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key !== "Tab") return;
 
-      if (focusableElements.length === 0) return;
+      const focusableElements = getFocusableElements();
+
+      if (focusableElements.length === 0) {
+        return;
+      }
 
       const first = focusableElements[0];
       const last = focusableElements[focusableElements.length - 1];
       const active = document.activeElement;
 
-      // Shift + Tab
       if (e.shiftKey) {
-        if (active === first || !container.contains(active)) {
+        // Shift + Tab: if on first element or outside container, loop to last
+        if (active === first || !container.contains(active as Node)) {
           e.preventDefault();
           last.focus();
         }
-      }
-
-      // Tab
-      else {
-        if (active === last || !container.contains(active)) {
+      } else {
+        // Tab: if on last element or outside container, loop to first
+        if (active === last || !container.contains(active as Node)) {
           e.preventDefault();
           first.focus();
         }
@@ -52,8 +62,9 @@ export function useFocusTrap(
 
     container.addEventListener("keydown", handleKeyDown);
 
+    // Cleanup: remove event listener on unmount or dependencies change
     return () => {
       container.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isOpen, containerRef]);
+  }, [isOpen, containerRef, initialFocusRef]);
 }
