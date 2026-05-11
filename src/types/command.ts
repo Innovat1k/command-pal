@@ -1,4 +1,4 @@
-export type ActionCategory = 'navigation' | 'action' | 'settings';
+export type ActionCategory = "navigation" | "action" | "settings";
 
 export type CommandAction = {
   id: string;
@@ -6,8 +6,8 @@ export type CommandAction = {
   shortcut?: string;
   category: ActionCategory;
   execute: () => void;
-  showFeedback?: boolean; 
-  successMessage?: string
+  showFeedback?: boolean;
+  successMessage?: string;
 };
 
 export type CommandState = {

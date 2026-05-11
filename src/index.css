@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* Toast : Enter */
 @keyframes toast-enter {
   from { opacity: 0; transform: translateY(16px); }
@@ -20,4 +22,24 @@
   .animate-toast-enter, .animate-toast-exit {
     animation: none !important;
   }
+}
+
+/* Custom Scrollbar */
+html {
+  scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(15, 20, 32, 0.5);
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
 }

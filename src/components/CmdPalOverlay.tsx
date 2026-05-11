@@ -81,10 +81,9 @@ export function CmdPalOverlay({ onToastShow }: Props) {
     >
       <div
         ref={containerRef}
-        className="w-full max-w-lg overflow-hidden rounded-xl border border-slate-700 bg-slate-900 shadow-2xl ring-1 ring-white/10"
+        className="w-full max-w-lg overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-2xl dark:shadow-black/40 ring-1 ring-black/5 dark:ring-white/10"
         style={{ maxHeight: "80vh" }}
       >
-
         <CmdPalInput
           ref={inputRef}
           query={state.query}

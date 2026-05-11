@@ -35,10 +35,10 @@
 - **✅ Deliverable**: Lighthouse Accessibility score = 100
 
 ### Day 5 — Functional Actions
-- [ ] Implement 10–15 real demo actions (theme toggle, copy URL, navigate, etc.)
-- [ ] Categorize actions (Navigation, Action, Settings)
-- [ ] Display shortcut hints dynamically
-- [ ] Optional: Lightweight toast notifications
+- [X] Implement 10–15 real demo actions (theme toggle, copy URL, navigate, etc.)
+- [X] Categorize actions (Navigation, Action, Settings)
+- [X] Display shortcut hints dynamically
+- [X] Optional: Lightweight toast notifications
 - **✅ Deliverable**: Fully interactive demo with real browser APIs
 
 ### Day 6 — Responsive & Mobile Fallback

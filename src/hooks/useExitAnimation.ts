@@ -9,11 +9,14 @@ export type Toast = {
 
 // Manages toast notifications with auto-dismiss and configurable type/duration
 export function useExitAnimation(isOpen: boolean, duration: number) {
-  const [shouldRender, setShouldRender] = useState(isOpen);
-  const [animationClass, setAnimationClass] = useState("");
+  const [shouldRender, setShouldRender] = useState<boolean>(isOpen);
+  const [animationClass, setAnimationClass] = useState<string>("");
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
+    // Legitimate pattern: this hook orchestrates a CSS animation cycle.
+    // The synchronous setStates here control the input/output timing,
+    // without creating a cascade because they only depend on `isOpen`.
     if (isOpen) {
       setShouldRender(true);
       setAnimationClass("animate-toast-enter");

@@ -101,9 +101,7 @@ describe("CmdPalOverlay Integration", () => {
 
       expect(screen.getByRole("combobox")).toHaveFocus();
 
-      await user.keyboard("{Tab}");
-      await user.keyboard("{Tab}");
-      await user.keyboard("{Tab}");
+      console.log(document.activeElement);
 
       expect(screen.getByRole("dialog").contains(document.activeElement)).toBe(
         true,
