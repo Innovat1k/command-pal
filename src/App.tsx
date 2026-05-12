@@ -17,7 +17,7 @@ function App() {
   return (
     <main className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-200 transition-colors duration-300">
       {/* HEADER */}
-      <header data-focus="top" className="pt-20 pb-12 text-center px-4">
+      <header data-focus="top" className="pt-20 pb-12 text-center px-6">
         <h1 className="text-4xl font-bold mb-4 tracking-tight">CmdPal Demo</h1>
 
         <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
@@ -36,7 +36,7 @@ function App() {
       </header>
 
       {/* CONTENT */}
-      <section className="max-w-4xl mx-auto px-4 py-12 space-y-12">
+      <section className="max-w-4xl mx-auto px-6 sm:px-0 py-12 space-y-12">
         {[
           {
             icon: "⌨️",
@@ -112,7 +112,7 @@ function App() {
             }),
           )
         }
-        className="fixed bottom-6 right-6 p-3 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-full shadow-lg dark:shadow-black/40 transition-colors md:hidden z-40"
+        className="fixed bottom-6 right-6 p-4 bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white rounded-full shadow-lg transition-colors md:hidden z-40 min-w-12 min-h-12 flex items-center justify-center"
         aria-label="Open command palette"
       >
         ⌘K

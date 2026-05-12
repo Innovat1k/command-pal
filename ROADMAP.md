@@ -42,10 +42,10 @@
 - **✅ Deliverable**: Fully interactive demo with real browser APIs
 
 ### Day 6 — Responsive & Mobile Fallback
-- [ ] Desktop: Centered overlay, `max-w-lg`
-- [ ] Tablet: Adaptive padding & width
-- [ ] Mobile: Full-screen overlay + floating trigger button
-- [ ] Cross-browser testing (Chrome, Firefox, Safari)
+- [X] Desktop: Centered overlay, `max-w-lg`
+- [X] Tablet: Adaptive padding & width
+- [X] Mobile: Full-screen overlay + floating trigger button
+- [X] Cross-browser testing (Chrome, Firefox, Safari)
 - **✅ Deliverable**: Works gracefully on all viewports & input types
 
 ### Day 7 — Performance, Docs & Deploy

@@ -34,7 +34,7 @@ export const CmdPalInput = forwardRef<HTMLInputElement, Props>(
           onChange={(e) => onChange(e.target.value)}
           onKeyDown={onKeyDown}
           placeholder="Type a command or search..."
-          className="w-full bg-transparent text-slate-700 dark:text-slate-300 outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
+          className="w-full bg-transparent text-slate-900 dark:text-slate-100 outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500 py-4 sm:py-3 px-4 text-lg sm:text-base"
           autoFocus
         />
       </div>

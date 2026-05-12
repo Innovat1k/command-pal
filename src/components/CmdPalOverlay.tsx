@@ -1,9 +1,10 @@
-import { useRef, useCallback } from "react";
+import { useRef } from "react";
 import { useCommandEngine } from "../hooks/useCommandEngine";
 import { useFocusTrap } from "../hooks/useFocusTrap";
 import { useExitAnimation } from "../hooks/useExitAnimation";
 import { CmdPalInput } from "./CmdPalInput";
 import { CmdPalList } from "./CmdPalList";
+import { useCmdPalExecution } from "../hooks/useCmdPalExecution";
 
 type Props = {
   onToastShow: (
@@ -16,14 +17,8 @@ type Props = {
 };
 
 export function CmdPalOverlay({ onToastShow }: Props) {
-  const {
-    state,
-    filteredActions,
-    setQuery,
-    close,
-    handleOverlayKeyDown,
-    execute,
-  } = useCommandEngine();
+  const { state, filteredActions, setQuery, close, handleOverlayKeyDown } =
+    useCommandEngine();
 
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -32,26 +27,17 @@ export function CmdPalOverlay({ onToastShow }: Props) {
 
   const { shouldRender, animationClass } = useExitAnimation(state.isOpen, 200);
 
-  const handleExecute = useCallback(() => {
-    const action = filteredActions[state.selectedIndex];
-
-    if (!action) return;
-
-    if (action.showFeedback || action.successMessage) {
-      onToastShow(action.successMessage || `✓ ${action.label}`, {
-        type: "success",
-        duration: 2500,
-      });
-    }
-
-    execute();
-  }, [filteredActions, state.selectedIndex, execute, onToastShow]);
+  const { executeSelected, executeByIndex } = useCmdPalExecution({
+    actions: filteredActions,
+    onToastShow,
+    onClose: close,
+  });
 
   const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     switch (e.key) {
       case "Enter":
         e.preventDefault();
-        handleExecute();
+        executeSelected(state.selectedIndex);
         break;
 
       default:
@@ -72,7 +58,7 @@ export function CmdPalOverlay({ onToastShow }: Props) {
       role="dialog"
       aria-modal="true"
       aria-label="Command Palette"
-      className={`fixed inset-0 z-50 flex items-start justify-center bg-black/60 pt-[20vh] backdrop-blur-sm ${animationClass}`}
+      className={`fixed inset-0 z-50 flex flex-col sm:items-center sm:justify-center bg-black/60 backdrop-blur-sm transition-opacity duration-200 sm:pt-[15vh] sm:px-4 ${animationClass}`}
       onClick={(e) => {
         if (e.target === e.currentTarget) {
           close();
@@ -81,25 +67,29 @@ export function CmdPalOverlay({ onToastShow }: Props) {
     >
       <div
         ref={containerRef}
-        className="w-full max-w-lg overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-2xl dark:shadow-black/40 ring-1 ring-black/5 dark:ring-white/10"
+        className={`w-full flex flex-col overflow-hidden bg-white dark:bg-slate-900 shadow-2xl
+        sm:border sm:border-slate-200 dark:sm:border-slate-700 sm:shadow-xl sm:ring-1 sm:ring-black/5 dark:sm:ring-white/10 h-dvh sm:h-auto sm:max-w-lg sm:rounded-xl sm:m-4 sm:max-h-[80vh] rounded-t-2xl`}
         style={{ maxHeight: "80vh" }}
       >
-        <CmdPalInput
-          ref={inputRef}
-          query={state.query}
-          onChange={setQuery}
-          isExpanded={filteredActions.length > 0}
-          selectedId={selectedId}
-          onKeyDown={handleInputKeyDown}
-        />
+        <div className="shrink-0 border-b border-slate-200 dark:border-slate-700">
+          <CmdPalInput
+            ref={inputRef}
+            query={state.query}
+            onChange={setQuery}
+            isExpanded={filteredActions.length > 0}
+            selectedId={selectedId}
+            onKeyDown={handleInputKeyDown}
+          />
+        </div>
 
-        <CmdPalList
-          actions={filteredActions}
-          selected={state.selectedIndex}
-          query={state.query}
-          onSelectByIndex={() => {}}
-          onExecute={handleExecute}
-        />
+        <div className="flex-1 overflow-y-auto min-h-0 overscroll-contain">
+          <CmdPalList
+            actions={filteredActions}
+            selected={state.selectedIndex}
+            query={state.query}
+            onExecute={executeByIndex}
+          />
+        </div>
       </div>
     </div>
   );

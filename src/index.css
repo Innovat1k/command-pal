@@ -25,10 +25,6 @@
 }
 
 /* Custom Scrollbar */
-html {
-  scroll-behavior: smooth;
-}
-
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -42,4 +38,22 @@ html {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #475569;
+}
+
+/* Prevent zooming on mobile focus input */
+@media (max-width: 640px) {
+  input, select, textarea {
+    font-size: 16px !important; /* Évite le zoom auto sur iOS */
+  }
+  
+  /* Aimprove scrolling on mobile */
+  .overflow-y-auto {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+}
+
+/* Disable tap highlights on mobile for a native look */
+* {
+  -webkit-tap-highlight-color: transparent;
 }

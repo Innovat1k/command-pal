@@ -8,7 +8,7 @@ type Props = {
   selected: number;
   query: string;
   onSelectByIndex?: (idx: number) => void;
-  onExecute: () => void;
+  onExecute: (idx: number) => void;
 };
 
 export function CmdPalList({
@@ -43,7 +43,7 @@ export function CmdPalList({
       id="cmd-list"
       role="listbox"
       aria-label="Available commands"
-      className="max-h-60 overflow-y-auto py-2"
+      className="h-full sm:max-h-60 overflow-y-auto py-2"
     >
       {actions.map((action, idx) => {
         const isSelected = idx === selected;
@@ -55,14 +55,14 @@ export function CmdPalList({
             role="option"
             aria-selected={isSelected}
             tabIndex={-1}
-            className={`flex items-center justify-between px-4 py-2 transition-all duration-150 ${
+            className={`flex items-center justify-between px-4 py-3 sm:py-2 transition-all duration-150 min-h-11 ${
               isSelected
                 ? "bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-300 font-medium"
-                : "cursor-pointer text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+                : "text-slate-700 dark:text-slate-300 sm:hover:bg-slate-100 dark:sm:hover:bg-slate-800 cursor-pointer"
             }`}
             onMouseEnter={() => onSelectByIndex?.(idx)}
             onMouseDown={(e) => e.preventDefault()}
-            onClick={onExecute}
+            onClick={() => onExecute(idx)}
           >
             <span>{action.label}</span>
 
