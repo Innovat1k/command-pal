@@ -96,10 +96,6 @@ export function ShortcutHint({ value, active }: Props) {
     }
   });
 
-  console.log(normalizedKeys);
-
-  console.log(displayKeys);
-
   const baseClasses =
     "px-1.5 py-0.5 text-xs font-mono rounded border transition-colors duration-150";
 
